@@ -23,7 +23,7 @@
 {% elif op.request.strategy == "noBody" %}
     {% include "Operation_Request_Snippet.stencil" op %}
 {% elif op.request.strategy == "patchBody" %}
-    {% include "Operation_Request_PatchBody_Snippet.stencil" op %}
+    {% include "Operation_Request_Body_Snippet.stencil" op %}
 {% else %}
     // TODO: Couldn't find template for {{ op.request.strategy }}
     assertFailure("Autorest generated bad code.")
