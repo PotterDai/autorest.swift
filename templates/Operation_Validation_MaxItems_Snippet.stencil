@@ -1,6 +1,6 @@
 {% if validation.hasMaxItems %}
 {% if validation.optional %}
-    if let value = {{ validation.path }}, value.count > {{ validation.maxItems }} {
+    if let value = {{ validation.path }}.count, value > {{ validation.maxItems }} {
 {% else %}
     if {{ validation.path }}.count > {{ validation.maxItems }} {
 {% endif %}
