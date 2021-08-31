@@ -215,7 +215,10 @@ struct Validation {
     ) -> [String: Validation]? {
         var validations = [String: Validation]()
         for property in schema.properties ?? [] {
-            let path = prefix.isEmpty ? property.name : "\(prefix).\(property.name)"
+            var path = prefix.isEmpty ? property.name : "\(prefix).\(property.name)"
+            if !property.required {
+                path = "\(path)?"
+            }
             if let objectSchema = property.schema as? ObjectSchema {
                 var newPrefix = prefix.isEmpty ? property.name : "\(prefix).\(property.name)"
                 if !property.required {
