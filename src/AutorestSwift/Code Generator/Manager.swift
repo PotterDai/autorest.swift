@@ -178,7 +178,7 @@ class Manager {
         runTool(
             with: "swiftlint",
             configFilename: ".swiftlint.yml",
-            arguments: ["autocorrect", "--quiet", baseUrl.path]
+            arguments: ["--fix", "--quiet", baseUrl.path]
         )
     }
 
