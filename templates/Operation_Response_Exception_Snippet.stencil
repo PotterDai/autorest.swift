@@ -18,16 +18,8 @@ if [{% for statusCode in exception.statusCodes %}{{ statusCode }},{% endfor %}].
         completionHandler(.failure(AzureError.service("{{ exception.description }}", decoded)), httpResponse)
     }
 {% elif exception.strategy == "plainBody" %}
-    do {
-        let decoder = JSONDecoder()
-        let decoded = try decoder.decode({{ exception.type }}.self, from: data)
-            dispatchQueue.async {
-                completionHandler(.failure(AzureError.service("{{ exception.description }}", decoded)), httpResponse)
-            }
-    } catch {
-        dispatchQueue.async {
-            completionHandler(.failure(AzureError.client("Decoding error.", error)), httpResponse)
-        }
+    dispatchQueue.async {
+        completionHandler(.failure(AzureError.service("{{ exception.description }}", String(decoding: data, as: UTF8.self))), httpResponse)
     }
 {% else %}
     // TODO: Couldn't find template for {{ exception.strategy }}
