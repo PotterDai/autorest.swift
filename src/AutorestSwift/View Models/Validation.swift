@@ -33,6 +33,9 @@ struct Validation {
     /// whether property is optional or not
     let optional: Bool
 
+    /// whether property is nullable or not
+    let nullable: Bool
+
     /// original parameter type
     let paramType: String
 
@@ -132,6 +135,7 @@ struct Validation {
         self.path = path
         self.paramType = paramType
         self.optional = path.contains("?")
+        self.nullable = path.hasSuffix("?")
 
         self.maxLength = maxLength
         self.hasMaxLength = maxLength != nil

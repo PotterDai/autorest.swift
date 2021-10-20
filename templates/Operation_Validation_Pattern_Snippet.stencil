@@ -1,8 +1,14 @@
 {% if validation.hasPattern %}
 {% if validation.optional %}
+    {% if validation.nullable %}
     if let value = {{ validation.path|slice:-1 }}, value.range(of: #"{{ validation.pattern }}"#, options: .regularExpression) == nil {
         validationErrors.append(#"{{ validation.path|slice:-1 }}: pattern {{ validation.pattern }}"#)
     }
+    {% else %}
+    if let value = {{ validation.path }}, value.range(of: #"{{ validation.pattern }}"#, options: .regularExpression) == nil {
+        validationErrors.append(#"{{ validation.path }}: pattern {{ validation.pattern }}"#)
+    }
+    {% endif %}
 {% else %}
     if {{ validation.path }}.range(of: #"{{ validation.pattern }}"#, options: .regularExpression) == nil {
         validationErrors.append(#"{{ validation.path }}: pattern {{ validation.pattern }}"#)
