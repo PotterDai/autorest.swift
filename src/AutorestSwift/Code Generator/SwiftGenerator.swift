@@ -42,16 +42,17 @@ class SwiftGenerator: CodeGenerator {
     }
 
     // MARK: Methods
-
     fileprivate func generateModels() throws {
         // Simple dictionary (for fast lookup) to determine if a model has already been written.
         // Skips regenerating a file with a less specific schema (Schema vs ObjectSchema, for example)
         // but keeps track of the number of times the model name appears for debugging purposes.
         var modelsWritten = [String: Int]()
+        var modelsCreated = [String: ObjectViewModel]()
 
         // Create model files
         for object in model.schemas.objects ?? [] {
             let name = object.modelName
+            SharedLogger.warn(name)
 
             guard modelsWritten[name] == nil else {
                 SharedLogger.warn("\(name) has already been generated once this run. Skipping...")
@@ -66,6 +67,7 @@ class SwiftGenerator: CodeGenerator {
                 andParams: ["model": viewModel]
             )
             modelsWritten[name] = 1
+            modelsCreated[name] = viewModel
 
             if let immediates = object.parents?.immediate {
                 // render any immediate parents of the object schema
@@ -108,6 +110,43 @@ class SwiftGenerator: CodeGenerator {
             )
             modelsWritten[name] = 1
         }
+
+        // Create Core Data model files
+        var coreDataModelsCreated = [String: ObjectViewModel]()
+        let coreDataModels = Manager.shared.args!.coreDataTypes
+
+        func generateCoreDataModel(coreDataModel: String) {
+            if let _ = coreDataModelsCreated[coreDataModel] {
+                return
+            }
+
+            if let model = modelsCreated[coreDataModel] {
+                try? render(
+                    template: "CoreData_Model_File",
+                    toSubfolder: .coreData,
+                    withFilename: "Managed\(coreDataModel)",
+                    andParams: ["model": model]
+                )
+                coreDataModelsCreated[coreDataModel] = model
+
+                for property in model.properties {
+                    if !property.isBasicType && !property.isEnumType {
+                        generateCoreDataModel(coreDataModel: property.className)
+                    }
+                }
+            }
+        }
+
+        for coreDataModel in coreDataModels {
+            generateCoreDataModel(coreDataModel: coreDataModel)
+        }
+
+        try? render(
+            template: "CoreData_Description",
+            toSubfolder: .coreData,
+            withFilename: "EntityDescription",
+            andParams: ["models": Array(coreDataModelsCreated.values)]
+        )
     }
 
     /// Begin code generation process
@@ -116,6 +155,7 @@ class SwiftGenerator: CodeGenerator {
         let optionsUrl = baseUrl.with(subfolder: .options)
         let utilUrl = baseUrl.with(subfolder: .util)
         let jazzyUrl = baseUrl.with(subfolder: .jazzy)
+        let coreDataUrl = baseUrl.with(subfolder: .coreData)
 
         // clear the generated folder to ensure renames are caught
         if let outputFolder = Manager.shared.args?.outputFolder {
@@ -127,6 +167,7 @@ class SwiftGenerator: CodeGenerator {
         try optionsUrl.ensureExists()
         try utilUrl.ensureExists()
         try jazzyUrl.ensureExists()
+        try coreDataUrl.ensureExists()
         SharedLogger.info("Base URL: \(baseUrl.path)")
 
         // Create PatchUtil.swift file
@@ -249,6 +290,7 @@ class SwiftGenerator: CodeGenerator {
         } else {
             destRoot = baseUrl
         }
+        SharedLogger.info("\(destRoot)")
         let fname = filename.lowercased().contains(".") ? filename : "\(filename).swift"
         let fileUrl = destRoot.with(subfolder: subfolder).appendingPathComponent(fname)
         let result = FileManager.default.fileExists(atPath: fileUrl.path)
@@ -266,6 +308,8 @@ class SwiftGenerator: CodeGenerator {
         let fname = filename.lowercased().contains(".") ? filename : "\(filename).swift"
         let fileUrl = baseUrl.with(subfolder: subfolder).appendingPathComponent(fname)
         try fileContent.write(to: fileUrl, atomically: true, encoding: .utf8)
+
+        SharedLogger.info("rendered \(fileUrl)")
     }
 
     private func renderClientMethodOptionsFile(

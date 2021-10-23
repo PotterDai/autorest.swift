@@ -47,7 +47,8 @@ class CommandLineArguments: Encodable {
         "client-side-validation",
         "package-name",
         "package-version",
-        "generate-as-internal"
+        "generate-as-internal",
+        "core-data-types"
     ]
 
     /// Keys which are explicitly unsupported and should throw and error if supplied
@@ -136,6 +137,14 @@ class CommandLineArguments: Encodable {
     /// Transforms for model types
     var generateAsInternal: ModelMap {
         return ModelMap(with: rawArgs["generate-as-internal"])
+    }
+
+    /// Coredata types
+    var coreDataTypes: [String] {
+        if let types = rawArgs["core-data-types"] {
+            return types.components(separatedBy: ",")
+        }
+        return []
     }
 
     // MARK: Initializers
