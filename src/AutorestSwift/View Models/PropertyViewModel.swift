@@ -35,12 +35,17 @@ struct PropertyViewModel {
     let serializedName: String
     let comment: ViewModelComment
     let type: String
+    let isBasicType: Bool
+    let isEnumType: Bool
+    let isDateType: Bool
+    let isGroupType: Bool
     // default value of the proeprty
     let defaultValue: ViewModelDefault
     // default value of the property in the init(). Valid values are either nil (for optional property) or "" (i.e. not specfied for required property in init() method.)
     let initDefaultValue: String
     let optional: Bool
     let className: String
+    let elementClassName: String?
 
     /// Initialize a `PropertyViewModel` directly
     init(
@@ -55,12 +60,17 @@ struct PropertyViewModel {
     ) {
         self.name = name
         self.type = type
+        self.isBasicType = false
+        self.isEnumType = false
+        self.isDateType = false
+        self.isGroupType = false
         self.serializedName = serializedName ?? name
         self.comment = ViewModelComment(from: comment)
         self.defaultValue = ViewModelDefault(from: defaultValue, isString: true, isOptional: optional)
         self.initDefaultValue = initDefaultValue ?? ""
         self.optional = optional
         self.className = className ?? type
+        self.elementClassName = ""
     }
 
     /// Initialize from Value type (such as Property or Parameter)
@@ -74,6 +84,11 @@ struct PropertyViewModel {
         self.className = schema.schema!.swiftType(parentName: parentName)
         self.optional = !schema.required
         self.type = optional ? "\(className)?" : className
+        self.isBasicType = schema.schema!.isBasicType()
+        self.isEnumType = schema.schema!.isEnumType()
+        self.isDateType = schema.schema!.isDateType()
+        self.isGroupType = schema.schema!.isGroupType()
+        self.elementClassName = schema.schema!.isGroupType() ? String(schema.schema!.swiftType(parentName: parentName).dropFirst().dropLast()) : ""
         self.defaultValue = ViewModelDefault(from: schema.clientDefaultValue, isString: true, isOptional: optional)
         self.initDefaultValue = optional ? "= nil" : ""
     }

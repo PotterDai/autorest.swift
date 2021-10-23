@@ -32,6 +32,7 @@ enum FileDestination {
     case source
     case generated
     case models
+    case coreData
     case operations
     case options
     case util
@@ -50,6 +51,9 @@ enum FileDestination {
         case .models:
             return baseUrl.appendingPathComponent("Source").appendingPathComponent("Generated")
                 .appendingPathComponent("Models")
+        case .coreData:
+            return baseUrl.appendingPathComponent("Source").appendingPathComponent("Generated")
+                .appendingPathComponent("CoreData")
         case .operations:
             return baseUrl.appendingPathComponent("Source").appendingPathComponent("Generated")
                 .appendingPathComponent("Operations")

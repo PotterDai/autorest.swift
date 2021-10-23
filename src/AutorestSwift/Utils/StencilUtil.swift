@@ -30,7 +30,34 @@ import Stencil
 
 public func renderTemplate(filename: String, dictionary: [String: Any]) throws -> String {
     let fsLoader = FileSystemLoader(bundle: [Bundle.main])
-    let environment = Environment(loader: fsLoader, trimBehavior: TrimBehavior.smart)
-
+    let ext = Extension()
+    // Register your filters and tags with the extension
+    ext.registerFilter("optionalMark") { (value: Any?) in
+        if let value = value as? Bool, value {
+            return "?"
+        }
+        return ""
+    }
+    ext.registerFilter("decapitalize") { (value: Any?) in
+        if let value = value as? String {
+            return String(value.prefix(1).lowercased() + value.dropFirst())
+        }
+        return value
+    }
+    ext.registerFilter("slice") { (value: Any?, arguments: [Any?]) in
+        guard arguments.count < 2 else {
+            throw TemplateSyntaxError("'dropFirst' filter takes at most one argument")
+        }
+        let amount: Int = (arguments.first as? Int) ?? 0
+        if let value = value as? String {
+            if amount < 0 {
+                return value.dropLast(-amount)
+            } else {
+                return value.dropFirst(amount)
+            }
+        }
+        return value
+    }
+    let environment = Environment(loader: fsLoader, extensions: [ext], trimBehavior: TrimBehavior.smart)
     return try environment.renderTemplate(name: filename, context: dictionary)
 }

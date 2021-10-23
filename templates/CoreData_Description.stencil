@@ -1,0 +1,115 @@
+{% include "Header_Snippet.stencil" %}
+
+{% include "CoreData_Import_Snippet.stencil" %}
+// swiftlint:disable superfluous_disable_command
+// swiftlint:disable identifier_name
+// swiftlint:disable line_length
+// swiftlint:disable cyclomatic_complexity
+
+class EntityDescription {
+    private(set) var entityDescriptionMap: [String: NSEntityDescription] = [:]
+
+    init() {
+    {% for model in models %}
+        let {{ model.name|decapitalize }}Description = entityDescription(for: "Managed{{ model.name }}")
+        var {{ model.name|decapitalize }}Properties: [NSPropertyDescription] = []
+    {% for property in model.properties %}
+        {% if property.isDateType %}
+        {{ model.name|decapitalize }}Properties.append(create(attribute: "{{ property.name }}", type: attributeType(for: "{{ property.name }}", ofType: Date?.self), isOptional: true))
+        {% elif property.isEnumType %}
+        {{ model.name|decapitalize }}Properties.append(create(attribute: "{{ property.name }}", type: attributeType(for: "{{ property.name }}", ofType: String?.self), isOptional: true))
+        {% elif property.isBasicType %}
+        {{ model.name|decapitalize }}Properties.append(create(attribute: "{{ property.name }}", type: attributeType(for: "{{ property.name }}", ofType: {{ property.className }}?.self), isOptional: true))
+        {% else %}
+        {% endif %}
+    {% endfor %}
+        {{ model.name|decapitalize }}Description.properties.append(contentsOf: {{ model.name|decapitalize }}Properties)
+
+    {% for property in model.properties %}
+    {% if property.isBasicType %}
+    {% elif property.isEnumType %}
+    {% elif property.isDateType %}
+    {% else %}
+        let {{ model.name|decapitalize }}{{ property.name|capitalize }}Relationship = NSRelationshipDescription()
+        let {{ model.name|decapitalize }}Inverse{{ property.name|capitalize }}Relationship = NSRelationshipDescription()
+        {{ model.name|decapitalize }}{{ property.name|capitalize }}Relationship.populate(with: "{{ property.className }}", destination: entityDescription(for: "Managed{{ property.className }}"), isArray: {{ property.isGroupType }}, deleteRule: .cascadeDeleteRule, inverseRelationship: {{ model.name|decapitalize }}Inverse{{ property.name|capitalize }}Relationship)
+        entityDescription(for: "Managed{{ model.name }}").properties.append({{ model.name|decapitalize }}{{ property.name|capitalize }}Relationship)
+        {{ model.name|decapitalize }}Inverse{{ property.name|capitalize }}Relationship.populate(with: "{{ model.name|decapitalize }}Inverse{{ property.name|capitalize }}Relationship", destination: entityDescription(for: "Managed{{ model.name }}"), isArray: {{ property.isGroupType }}, deleteRule: .cascadeDeleteRule, inverseRelationship: {{ model.name|decapitalize }}{{ property.name|capitalize }}Relationship)
+        entityDescription(for: "Managed{{ property.className }}").properties.append({{ model.name|decapitalize }}Inverse{{ property.name|capitalize }}Relationship)
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+    }
+
+    @discardableResult
+    private func create(attribute: String, type: NSAttributeType, isOptional: Bool, defaultValue: Any? = nil) -> NSAttributeDescription {
+        let description = NSAttributeDescription()
+        description.name = attribute
+        description.attributeType = type
+        if description.attributeType == .transformableAttributeType { description.valueTransformerName = "NSSecureUnarchiveFromData" }
+        description.isOptional = isOptional
+        if let value = defaultValue { description.defaultValue = value }
+        return description
+    }
+    
+    private func entityDescription(for entityName: String) -> NSEntityDescription {
+        if let entityDescription = entityDescriptionMap[entityName] {
+            return entityDescription
+        }
+
+        let entityDescription = NSEntityDescription()
+        entityDescription.name = entityName
+        entityDescription.managedObjectClassName = entityName
+        entityDescriptionMap[entityName] = entityDescription
+
+        return entityDescription
+    }
+    
+    private func attributeType(for variableName: String, ofType type: Any.Type) -> NSAttributeType {
+        if type is String.Type
+            || type is String?.Type {
+            return .stringAttributeType
+        } else if type is Bool.Type
+            || type is Bool?.Type {
+            return .booleanAttributeType
+        } else if type is Int.Type
+            || type is Int?.Type {
+            return .integer64AttributeType
+        } else if type is Int64.Type
+            || type is Int64?.Type {
+            return .integer64AttributeType
+        } else if type is Double.Type
+            || type is Double?.Type {
+            return .doubleAttributeType
+        } else if type is Data.Type
+            || type is Data?.Type {
+            return .binaryDataAttributeType
+        } else if type is Date.Type
+            || type is Date?.Type {
+            return .dateAttributeType
+        } else if type is Codable.Type
+            || type is Dictionary<String, String>.Type
+            || type is Array<String>.Type
+            || type is [String]?.Type {
+            return .transformableAttributeType
+        } else {
+            fatalError("Cannot resolve CoreData attribute type for \"\(variableName)\" of type \"\(String(describing: type))\"")
+        }
+    }
+}
+
+extension NSRelationshipDescription {
+    func populate(with relationship: String, destination: NSEntityDescription, isArray: Bool, deleteRule: NSDeleteRule, inverseRelationship: NSRelationshipDescription) {
+        self.name = relationship
+        self.destinationEntity = destination
+        if isArray {
+            self.minCount = 0
+            self.maxCount = 0
+            self.isOrdered = true
+        } else {
+            self.maxCount = 1
+        }
+        self.deleteRule = deleteRule
+        self.inverseRelationship = inverseRelationship
+    }
+}

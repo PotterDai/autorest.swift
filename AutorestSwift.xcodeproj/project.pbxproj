@@ -445,6 +445,9 @@
 		0AEFC3412537647A00C6B087 /* PropertyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyType.swift; sourceTree = "<group>"; };
 		0AFA1AE7254C979500DF1CB9 /* AutoRestSwaggerBatTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoRestSwaggerBatTest.swift; sourceTree = "<group>"; };
 		4B8C7552DB3E5F0B459F0295 /* Pods-AutorestSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AutorestSwift.debug.xcconfig"; path = "Target Support Files/Pods-AutorestSwift/Pods-AutorestSwift.debug.xcconfig"; sourceTree = "<group>"; };
+		A1977B042721FBEC00CF6A2E /* CoreData_Description.stencil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CoreData_Description.stencil; sourceTree = "<group>"; };
+		A1977B062721FBEC00CF6A2E /* CoreData_Import_Snippet.stencil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CoreData_Import_Snippet.stencil; sourceTree = "<group>"; };
+		A1977B072721FBEC00CF6A2E /* CoreData_Model_File.stencil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CoreData_Model_File.stencil; sourceTree = "<group>"; };
 		A1DC478C26C5DE51001388E6 /* AnyCodable_File.stencil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AnyCodable_File.stencil; sourceTree = "<group>"; };
 		A3FDFDBC61B301CB1982C7A8 /* libPods-AutorestSwift.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AutorestSwift.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		"AutorestSwift::AutorestSwift::Product" /* AutorestSwift */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = AutorestSwift; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -662,6 +665,9 @@
 		0A22B06F24CB71E100EC018E /* templates */ = {
 			isa = PBXGroup;
 			children = (
+				A1977B042721FBEC00CF6A2E /* CoreData_Description.stencil */,
+				A1977B062721FBEC00CF6A2E /* CoreData_Import_Snippet.stencil */,
+				A1977B072721FBEC00CF6A2E /* CoreData_Model_File.stencil */,
 				A1DC478C26C5DE51001388E6 /* AnyCodable_File.stencil */,
 				0ADDD33F259270E200BD5E58 /* Client_ApiVersion_Snippet.stencil */,
 				0A22B07124CB71E100EC018E /* Client_File.stencil */,

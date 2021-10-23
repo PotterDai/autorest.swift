@@ -120,7 +120,7 @@ class Schema: Codable, LanguageShortcut {
             swiftType = "UnixTime"
         case .byteArray:
             if let byteArrayScheme = self as? ByteArraySchema,
-                byteArrayScheme.format == .base64url {
+               byteArrayScheme.format == .base64url {
                 swiftType = "String"
             } else {
                 swiftType = "Data"
@@ -165,6 +165,43 @@ class Schema: Codable, LanguageShortcut {
         return swiftType
     }
 
+    func isBasicType() -> Bool {
+        if self.type == .array {
+            guard let arraySchema = self as? ArraySchema else {
+                fatalError("Type mismatch. Expected array type but got \(self)")
+            }
+            return arraySchema.elementType.isBasicType()
+        }
+
+        return self.type != .object && !self.isEnumType()
+    }
+
+    func isEnumType() -> Bool {
+        if self.type == .array {
+            guard let arraySchema = self as? ArraySchema else {
+                fatalError("Type mismatch. Expected array type but got \(self)")
+            }
+            return arraySchema.elementType.isEnumType()
+        }
+
+        return self.type == .choice || self.type == .sealedChoice
+    }
+
+    func isDateType() -> Bool {
+        if self.type == .array {
+            guard let arraySchema = self as? ArraySchema else {
+                fatalError("Type mismatch. Expected array type but got \(self)")
+            }
+            return arraySchema.elementType.isDateType()
+        }
+
+        return self.type == .date || self.type == .dateTime
+    }
+
+    func isGroupType() -> Bool {
+        return self.type == .array || self.type == .dictionary
+    }
+
     var modelName: String {
         let rawName = Manager.shared.args!.generateAsInternal.aliasOrName(for: name)
         return rawName.isReservedType ? rawName + "Type" : rawName
@@ -180,13 +217,13 @@ class Schema: Codable, LanguageShortcut {
             return .unixTime
         case .byteArray:
             if let byteSchema = self as? ByteArraySchema,
-                byteSchema.format == .base64url {
+               byteSchema.format == .base64url {
                 return .data
             }
             return .byteArray
         case .array:
             if let arraySchema = self as? ArraySchema,
-                arraySchema.elementType.type == .date || arraySchema.elementType.type == .dateTime {
+               arraySchema.elementType.type == .date || arraySchema.elementType.type == .dateTime {
                 return arraySchema.elementType.bodyParamStrategy
             } else {
                 return .plain
