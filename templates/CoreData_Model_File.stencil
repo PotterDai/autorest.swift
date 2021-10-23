@@ -29,14 +29,14 @@ final public class Managed{{ model.name }} : NSManagedObject, Identifiable {
     @NSManaged public var {{ property.name }}: {{ property.type }}
 {% else %}
     {% if property.isGroupType %}
-    @NSManaged public var {{ property.name }}: [Managed{{ property.elementClassName }}]{{ property.optional|optionalMark }}
+    @NSManaged public var {{ property.name }}: NSOrderedSet{{ property.optional|optionalMark }}
     {% else %}
     @NSManaged public var {{ property.name }}: Managed{{ property.type }}
     {% endif %}
 {% endif %}
 {% endfor %}
 
-    convenience init(plainModel: {{ model.name }}?, context: NSManagedObjectContext?) {
+    public convenience init(plainModel: {{ model.name }}?, context: NSManagedObjectContext?) {
         let entity = NSEntityDescription.entity(forEntityName: "Managed{{ model.name }}", in: context!)
         self.init(entity: entity!, insertInto: context)
 
@@ -57,7 +57,7 @@ final public class Managed{{ model.name }} : NSManagedObject, Identifiable {
             self.{{ property.name }} = plainModel?.{{ property.name }}
         {% else %}
             {% if property.isGroupType %}
-            self.{{ property.name }} = plainModel?.{{ property.name }}{{ property.optional|optionalMark }}.compactMap({ Managed{{ property.elementClassName }}(plainModel: $0, context: context) })
+            self.{{ property.name }} = NSOrderedSet(array: plainModel?.{{ property.name }}{{ property.optional|optionalMark }}.compactMap({ Managed{{ property.elementClassName }}(plainModel: $0, context: context) }) ?? [])
             {% else %}
             self.{{ property.name }} = Managed{{ property.className }}(plainModel: plainModel?.{{ property.name }}, context: context)
             {% endif %}
@@ -84,7 +84,7 @@ final public class Managed{{ model.name }} : NSManagedObject, Identifiable {
                 {{ property.name }}: self.{{ property.name }}{% if not forloop.last %},{% endif %}
             {% else %}
                 {% if property.isGroupType %}
-                {{ property.name }}: {{ property.name }}{{ property.optional|optionalMark }}.compactMap{ $0.toPlainModel() }{% if not forloop.last %},{% endif %}
+                {{ property.name }}: {{ property.name }}{{ property.optional|optionalMark }}.compactMap{ ($0 as! Managed{{ property.elementClassName }}).toPlainModel() }{% if not forloop.last %},{% endif %}
                 {% else %}
                 {{ property.name }}: {{ property.name }}{{ property.optional|optionalMark }}.toPlainModel(){% if not forloop.last %},{% endif %}
                 {% endif %}
