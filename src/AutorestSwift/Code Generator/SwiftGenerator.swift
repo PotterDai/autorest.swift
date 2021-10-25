@@ -157,7 +157,7 @@ class SwiftGenerator: CodeGenerator {
         try? render(
             template: "CoreData_XCModel_File",
             toSubfolder: .coreData,
-            withFilename: "contents",
+            withFilename: "contents.md",
             andParams: ["models": Array(coreDataModelsCreated.values)]
         )
     }
