@@ -154,7 +154,7 @@ class AutorestPlugin {
         }
 
         while let file = enumerator.nextObject() as? String {
-            if file.hasSuffix(".swift") || file.hasSuffix(".md") || file.hasSuffix(".yml") {
+            if file.hasSuffix(".swift") || file.hasSuffix(".md") || file.hasSuffix(".yml") || file == "contents" {
                 generatedFileList.append(file)
             }
         }
