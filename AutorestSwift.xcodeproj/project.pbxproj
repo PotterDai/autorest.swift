@@ -235,6 +235,10 @@
 		0ADDD6C3259C04A400BD5E58 /* Operation_Validation_Pattern_Snippet.stencil in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0ADDD64D259BEE0E00BD5E58 /* Operation_Validation_Pattern_Snippet.stencil */; };
 		0AEFC3422537647A00C6B087 /* PropertyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEFC3412537647A00C6B087 /* PropertyType.swift */; };
 		61408633D6F295F6BEB082F0 /* libPods-AutorestSwift.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A3FDFDBC61B301CB1982C7A8 /* libPods-AutorestSwift.a */; };
+		A19A10362724A2AF0028C10F /* CoreDataObjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19A10342724A2AF0028C10F /* CoreDataObjectViewModel.swift */; };
+		A19A10372724A2AF0028C10F /* ClientOptionsFileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19A10352724A2AF0028C10F /* ClientOptionsFileViewModel.swift */; };
+		A19A103A2724A3330028C10F /* CoreDataPropertyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19A10392724A3320028C10F /* CoreDataPropertyViewModel.swift */; };
+		A1F3E5C027248E6E00245FFA /* CoreDataRelationshipViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F3E5BF27248E6E00245FFA /* CoreDataRelationshipViewModel.swift */; };
 		F106826D24CF5B9C007EB4D5 /* .swiftlint.yml in CopyFiles */ = {isa = PBXBuildFile; fileRef = F106826C24CF5B7C007EB4D5 /* .swiftlint.yml */; };
 		F106826E24CF5B9C007EB4D5 /* .swiftformat in CopyFiles */ = {isa = PBXBuildFile; fileRef = F106826B24CF5B71007EB4D5 /* .swiftformat */; };
 		F10B1F6325414556007DA581 /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10B1F6125414556007DA581 /* Dictionary+Extension.swift */; };
@@ -448,7 +452,12 @@
 		A1977B042721FBEC00CF6A2E /* CoreData_Description.stencil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CoreData_Description.stencil; sourceTree = "<group>"; };
 		A1977B062721FBEC00CF6A2E /* CoreData_Import_Snippet.stencil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CoreData_Import_Snippet.stencil; sourceTree = "<group>"; };
 		A1977B072721FBEC00CF6A2E /* CoreData_Model_File.stencil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CoreData_Model_File.stencil; sourceTree = "<group>"; };
+		A19A10342724A2AF0028C10F /* CoreDataObjectViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataObjectViewModel.swift; sourceTree = "<group>"; };
+		A19A10352724A2AF0028C10F /* ClientOptionsFileViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientOptionsFileViewModel.swift; sourceTree = "<group>"; };
+		A19A10392724A3320028C10F /* CoreDataPropertyViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataPropertyViewModel.swift; sourceTree = "<group>"; };
+		A19A103C2724BFC50028C10F /* CoreData_XCModel_File.stencil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = CoreData_XCModel_File.stencil; sourceTree = "<group>"; };
 		A1DC478C26C5DE51001388E6 /* AnyCodable_File.stencil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AnyCodable_File.stencil; sourceTree = "<group>"; };
+		A1F3E5BF27248E6E00245FFA /* CoreDataRelationshipViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataRelationshipViewModel.swift; sourceTree = "<group>"; };
 		A3FDFDBC61B301CB1982C7A8 /* libPods-AutorestSwift.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AutorestSwift.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		"AutorestSwift::AutorestSwift::Product" /* AutorestSwift */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = AutorestSwift; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE64E2670A1CB8357C872FB4 /* Pods-AutorestSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AutorestSwift.release.xcconfig"; path = "Target Support Files/Pods-AutorestSwift/Pods-AutorestSwift.release.xcconfig"; sourceTree = "<group>"; };
@@ -634,6 +643,10 @@
 		0A22B05A24CA4C9300EC018E /* View Models */ = {
 			isa = PBXGroup;
 			children = (
+				A19A10352724A2AF0028C10F /* ClientOptionsFileViewModel.swift */,
+				A19A10342724A2AF0028C10F /* CoreDataObjectViewModel.swift */,
+				A19A10392724A3320028C10F /* CoreDataPropertyViewModel.swift */,
+				A1F3E5BF27248E6E00245FFA /* CoreDataRelationshipViewModel.swift */,
 				0ADDD617259BDE0A00BD5E58 /* BodyParams.swift */,
 				0A5F3F85251A65AD0079C1F0 /* BodyParamViewModel.swift */,
 				0A22B0C224D3301100EC018E /* ClientMethodOptionsViewModel.swift */,
@@ -665,6 +678,7 @@
 		0A22B06F24CB71E100EC018E /* templates */ = {
 			isa = PBXGroup;
 			children = (
+				A19A103C2724BFC50028C10F /* CoreData_XCModel_File.stencil */,
 				A1977B042721FBEC00CF6A2E /* CoreData_Description.stencil */,
 				A1977B062721FBEC00CF6A2E /* CoreData_Import_Snippet.stencil */,
 				A1977B072721FBEC00CF6A2E /* CoreData_Model_File.stencil */,
@@ -1354,6 +1368,7 @@
 				0A22B11424D3671E00EC018E /* Parameter.swift in Sources */,
 				0A22B11524D3671E00EC018E /* PrimitiveSchema.swift in Sources */,
 				0A22B11624D3671E00EC018E /* Property.swift in Sources */,
+				A1F3E5C027248E6E00245FFA /* CoreDataRelationshipViewModel.swift in Sources */,
 				0ADDD3F62592C38B00BD5E58 /* Validation.swift in Sources */,
 				0AA2BA3024F57A5B00CEA1D6 /* ParameterType.swift in Sources */,
 				0A22B11724D3671E00EC018E /* Protocol.swift in Sources */,
@@ -1401,6 +1416,7 @@
 				0A22B13824D3671E00EC018E /* AnyCodable.swift in Sources */,
 				0A22B13924D3671E00EC018E /* ApiVersion.swift in Sources */,
 				0A22B13A24D3671E00EC018E /* ChoiceValue.swift in Sources */,
+				A19A10372724A2AF0028C10F /* ClientOptionsFileViewModel.swift in Sources */,
 				0A22B13B24D3671E00EC018E /* ConditionalValue.swift in Sources */,
 				0A22B13D24D3671E00EC018E /* Contact.swift in Sources */,
 				0A22B13E24D3671E00EC018E /* Deprecation.swift in Sources */,
@@ -1410,6 +1426,7 @@
 				0A22B14224D3671F00EC018E /* HttpHeader.swift in Sources */,
 				0A22B14324D3671F00EC018E /* Info.swift in Sources */,
 				0A22B14424D3671F00EC018E /* Language.swift in Sources */,
+				A19A10362724A2AF0028C10F /* CoreDataObjectViewModel.swift in Sources */,
 				0AA2BA1824EC866100CEA1D6 /* AutorestPlugin.swift in Sources */,
 				0A22B14524D3671F00EC018E /* Languages.swift in Sources */,
 				0A22B14624D3671F00EC018E /* License.swift in Sources */,
@@ -1426,6 +1443,7 @@
 				0A22B14F24D3671F00EC018E /* String+Extensions.swift in Sources */,
 				0A22B15024D3671F00EC018E /* Encodable+Extensions.swift in Sources */,
 				0A22B15124D3671F00EC018E /* URL+Extensions.swift in Sources */,
+				A19A103A2724A3330028C10F /* CoreDataPropertyViewModel.swift in Sources */,
 				0A22B15224D3671F00EC018E /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

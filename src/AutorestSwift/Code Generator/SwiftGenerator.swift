@@ -112,39 +112,52 @@ class SwiftGenerator: CodeGenerator {
         }
 
         // Create Core Data model files
-        var coreDataModelsCreated = [String: ObjectViewModel]()
-        let coreDataModels = Manager.shared.args!.coreDataTypes
+        generateCoreDataModels(modelsCreated: modelsCreated)
+    }
 
-        func generateCoreDataModel(coreDataModel: String) {
-            if let _ = coreDataModelsCreated[coreDataModel] {
+    fileprivate func generateCoreDataModels(modelsCreated: [String: ObjectViewModel]) {
+        let coreDataModels = Manager.shared.args!.coreDataTypes
+        var coreDataModelsCreated = [String: CoreDataObjectViewModel]()
+
+        func generateCoreDataModel(modelName: String) {
+            if let _ = coreDataModelsCreated[modelName] {
                 return
             }
 
-            if let model = modelsCreated[coreDataModel] {
+            if let objectModel = modelsCreated[modelName] {
                 try? render(
                     template: "CoreData_Model_File",
                     toSubfolder: .coreData,
-                    withFilename: "Managed\(coreDataModel)",
-                    andParams: ["model": model]
+                    withFilename: "Managed\(modelName)",
+                    andParams: ["model": objectModel, "packageName": model.packageName]
                 )
-                coreDataModelsCreated[coreDataModel] = model
 
-                for property in model.properties {
-                    if !property.isBasicType && !property.isEnumType {
-                        generateCoreDataModel(coreDataModel: property.className)
-                    }
+                let coreDataModel = CoreDataObjectViewModel(objectModel: objectModel)
+                coreDataModelsCreated[modelName] = coreDataModel
+
+                for relationship in coreDataModel.relationships {
+                    generateCoreDataModel(modelName: relationship.inverseEntity)
                 }
             }
         }
 
-        for coreDataModel in coreDataModels {
-            generateCoreDataModel(coreDataModel: coreDataModel)
+        for modelName in coreDataModels {
+            generateCoreDataModel(modelName: modelName)
+        }
+
+        for coreDataModel in coreDataModelsCreated.values {
+            for relationship in coreDataModel.relationships {
+                if var inverseModel = coreDataModelsCreated[relationship.inverseEntity] {
+                    inverseModel.addRelationship(relationship: CoreDataRelationshipViewModel(toInverseRelationship: relationship))
+                    coreDataModelsCreated[relationship.inverseEntity] = inverseModel
+                }
+            }
         }
 
         try? render(
-            template: "CoreData_Description",
+            template: "CoreData_XCModel_File",
             toSubfolder: .coreData,
-            withFilename: "EntityDescription",
+            withFilename: "contents.md",
             andParams: ["models": Array(coreDataModelsCreated.values)]
         )
     }

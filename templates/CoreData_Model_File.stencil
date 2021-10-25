@@ -1,41 +1,15 @@
 {% include "Header_Snippet.stencil" %}
 
 {% include "CoreData_Import_Snippet.stencil" %}
-import AzureCore
+
+import {{ packageName }}
 // swiftlint:disable superfluous_disable_command
 // swiftlint:disable identifier_name
 // swiftlint:disable line_length
 // swiftlint:disable cyclomatic_complexity
 
 {{ model.comment }}
-@objc(Managed{{ model.name }})
-final public class Managed{{ model.name }} : NSManagedObject, Identifiable {
-    // MARK: Properties
-{% for property in model.properties %}
-    {{ property.comment }}
-{% if property.isDateType %}
-    {% if property.isGroupType %}
-    @NSManaged public var {{ property.name }}: [Date]{{ property.optional|optionalMark }}
-    {% else %}
-    @NSManaged public var {{ property.name }}: Date{{ property.optional|optionalMark }}
-    {% endif %}
-{% elif property.isEnumType %}
-    {% if property.isGroupType %}
-    @NSManaged public var {{ property.name }}: [String]{{ property.optional|optionalMark }}
-    {% else %}
-    @NSManaged public var {{ property.name }}: String{{ property.optional|optionalMark }}
-    {% endif %}
-{% elif property.isBasicType %}
-    @NSManaged public var {{ property.name }}: {{ property.type }}
-{% else %}
-    {% if property.isGroupType %}
-    @NSManaged public var {{ property.name }}: NSOrderedSet{{ property.optional|optionalMark }}
-    {% else %}
-    @NSManaged public var {{ property.name }}: Managed{{ property.type }}
-    {% endif %}
-{% endif %}
-{% endfor %}
-
+extension Managed{{ model.name }} : Identifiable {
     public convenience init(plainModel: {{ model.name }}?, context: NSManagedObjectContext?) {
         let entity = NSEntityDescription.entity(forEntityName: "Managed{{ model.name }}", in: context!)
         self.init(entity: entity!, insertInto: context)

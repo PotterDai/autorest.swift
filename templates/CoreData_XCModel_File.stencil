@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    {% for model in models %}
+        <entity name="Managed{{ model.name }}" representedClassName="Managed{{ model.name }}" syncable="YES" codeGenerationType="class">
+            {% for property in model.properties %}
+                <attribute name="{{ property.name }}" optional="{{ property.isOptional }}" attributeType="{{ property.attributeType }}"/>
+            {% endfor %}
+            {% for relationship in model.relationships %}
+                <relationship name="{{ relationship.name }}" optional="{{ relationship.isOptional }}" {% if relationship.isArray %} toMany="YES" ordered="YES"{% else %} maxCount="1"{% endif %} deletionRule="{{ relationship.deletionRule }}" destinationEntity="Managed{{ relationship.destination }}" inverseName="{{ relationship.inverseName }}" inverseEntity="Managed{{ relationship.inverseEntity }}"/>
+            {% endfor %}
+        </entity>
+    {% endfor %}
+</model>
