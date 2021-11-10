@@ -38,12 +38,12 @@ struct CoreDataRelationshipViewModel {
 
     init(model: ObjectViewModel, property: PropertyViewModel, isInverse: Bool) {
         entity = isInverse ? (property.isGroupType ? property.elementClassName! : property.className) : model.name
-        name = isInverse ? "inverse\(property.name.capitalized)" : "\(property.name)"
-        isOptional = property.optional ? "YES" : "NO"
+        name = isInverse ? "inverse\(model.name.capitalized)\(property.name.capitalized)" : "\(property.name)"
+        isOptional = (property.optional && !property.isGroupType) ? "YES" : "NO"
         isArray = property.isGroupType
         deletionRule = isInverse ? "Nullify" : "Cascade"
         destination = isInverse ? model.name : (property.isGroupType ? property.elementClassName! : property.className)
-        inverseName = isInverse ? "\(property.name)" : "inverse\(property.name.capitalized)"
+        inverseName = isInverse ? "\(property.name)" : "inverse\(model.name.capitalized)\(property.name.capitalized)"
         inverseEntity = isInverse ? model.name : (property.isGroupType ? property.elementClassName! : property.className)
     }
 
