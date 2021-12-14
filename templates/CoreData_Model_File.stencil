@@ -23,7 +23,7 @@ extension Managed{{ model.name }} : Identifiable {
             {% if property.isGroupType %}
             self.{{ property.name }} = plainModel.{{ property.name }}{{ property.optional|optionalMark }}.compactMap({ $0.rawValue })
             {% else %}
-            self.{{ property.name }} = (plainModel.{{ property.name }} ?? .unknown){{ property.optional|optionalMark }}.rawValue
+            self.{{ property.name }} = plainModel.{{ property.name }}{{ property.optional|optionalMark }}.rawValue
             {% endif %}
         {% elif property.isDateType %}
             {% if property.isGroupType %}

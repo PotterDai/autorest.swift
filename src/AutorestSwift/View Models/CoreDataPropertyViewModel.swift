@@ -79,6 +79,8 @@ private func attributeType(ofType type: String) -> String {
         return "UUID"
     } else if type == "URL" {
         return "URI"
+    } else if type == "AnyCodable" {
+        return "Binary"
     } else if type.starts(with: "[") {
         return "Transformable"
     } else {
