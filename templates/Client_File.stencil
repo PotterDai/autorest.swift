@@ -37,6 +37,12 @@
         endpoint: URL,
     {% endif %}
         authPolicy: Authenticating,
+        userAgentPolicy: PipelineStage? = nil,
+        requestIdPolicy: PipelineStage? = nil,
+        addDatePolicy: PipelineStage? = nil,
+        contentDecodePolicy: PipelineStage? = nil,
+        loggingPolicy: PipelineStage? = nil,
+        normalizeETagPolicy: PipelineStage? = nil,
         withOptions options: {{ model.optionsName }}
     ) throws {
     {% if model.host != "" %}
@@ -55,13 +61,13 @@
             endpoint: endpoint,
             transport: options.transportOptions.transport ?? URLSessionTransport(),
             policies: [
-                UserAgentPolicy(for: {{ model.name }}.self, telemetryOptions: options.telemetryOptions),
-                RequestIdPolicy(),
-                AddDatePolicy(),
+                userAgentPolicy ?? UserAgentPolicy(for: {{ model.name }}.self, telemetryOptions: options.telemetryOptions),
+                requestIdPolicy ?? RequestIdPolicy(),
+                addDatePolicy ?? AddDatePolicy(),
                 authPolicy,
-                ContentDecodePolicy(),
-                LoggingPolicy(),
-                NormalizeETagPolicy()
+                contentDecodePolicy ?? ContentDecodePolicy(),
+                loggingPolicy ?? LoggingPolicy(),
+                normalizeETagPolicy ?? NormalizeETagPolicy()
             ],
             logger: options.logger,
             options: options
