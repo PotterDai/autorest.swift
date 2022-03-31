@@ -15,8 +15,7 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/PotterDai/SwiftPM-AzureCore.git",
-            .branch("dev/AzureCore")
+            path: "./SwiftPM-AzureCore"
         )
     ],
     targets: [
