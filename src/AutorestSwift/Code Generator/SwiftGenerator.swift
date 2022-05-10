@@ -221,13 +221,15 @@ class SwiftGenerator: CodeGenerator {
         }
 
         // Create Identifiers.swift file
+        var groups = Array(clientViewModel.namedOperationGroups.values)
+        groups.sort(by: { $0.name.compare($1.name) == .orderedAscending })
         try render(
             template: "Identifiers_File",
             toSubfolder: .util,
             withFilename: "Identifiers",
             andParams: [
                 "packageName": model.name,
-                "groups": Array(clientViewModel.namedOperationGroups.values)
+                "groups": groups
             ]
         )
 
