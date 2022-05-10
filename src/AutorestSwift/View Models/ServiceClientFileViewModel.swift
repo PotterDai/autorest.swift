@@ -28,6 +28,7 @@ import Foundation
 
 /// View Model for the service client file.
 struct ServiceClientFileViewModel {
+    let packageName: String
     let name: String
     let comment: ViewModelComment
     let visibility: String
@@ -44,6 +45,7 @@ struct ServiceClientFileViewModel {
 
     init(from model: CodeModel) {
         let baseName = "\(model.packageName)Client"
+        self.packageName = model.packageName
         self.optionsName = Manager.shared.args!.generateAsInternal.aliasOrName(for: "\(baseName)Options")
         self.name = Manager.shared.args!.generateAsInternal.aliasOrName(for: baseName)
         self.visibility = Manager.shared.args!.generateAsInternal.visibility(for: name)

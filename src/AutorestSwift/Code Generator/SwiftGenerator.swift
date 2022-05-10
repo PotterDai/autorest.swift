@@ -226,6 +226,7 @@ class SwiftGenerator: CodeGenerator {
             toSubfolder: .util,
             withFilename: "Identifiers",
             andParams: [
+                "packageName": model.name,
                 "groups": Array(clientViewModel.namedOperationGroups.values)
             ]
         )
