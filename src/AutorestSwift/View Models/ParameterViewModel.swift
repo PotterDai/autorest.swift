@@ -168,7 +168,7 @@ struct ParameterViewModel {
                 // explode parameters are inflated in the stencil file
                 pathOrValue = name
             } else {
-                var element = "$0"
+                var element = "$0.requestString"
                 if let arraySchema = param.schema as? ArraySchema,
                     arraySchema.nullableItems ?? false {
                     element = "$0 ?? \"\""

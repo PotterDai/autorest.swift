@@ -1,0 +1,13 @@
+{% include "Header_Snippet.stencil" %}
+
+{% include "Import_Snippet.stencil" %}
+
+enum Identifiers {
+{% for group in groups %}
+    enum {{ group.name }} : String {
+        {% for op in group.operations %}
+            case {{ op.rawName }} = "{{ group.name }}_{{ op.rawName }}"
+        {% endfor %}
+    }
+{% endfor %}
+}

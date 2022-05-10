@@ -220,6 +220,16 @@ class SwiftGenerator: CodeGenerator {
             try renderClientMethodOptionsFile(for: operationGroup, using: "Method_Options_File")
         }
 
+        // Create Identifiers.swift file
+        try render(
+            template: "Identifiers_File",
+            toSubfolder: .util,
+            withFilename: "Identifiers",
+            andParams: [
+                "groups": Array(clientViewModel.namedOperationGroups.values)
+            ]
+        )
+
         // Create ClientOperationGroup.swift file for each operation group with name
         for (groupName, operationGroup) in clientViewModel.namedOperationGroups {
             try render(

@@ -36,6 +36,9 @@ struct OperationViewModel {
     /// Name of the operation
     let name: String
 
+    /// Name directly coming from Operation object
+    let rawName: String
+
     /// Comment association with the operation
     let comment: ViewModelComment
 
@@ -64,6 +67,7 @@ struct OperationViewModel {
         self.request = RequestViewModel(from: request, with: operation)
 
         self.name = operationName(for: operation)
+        self.rawName = operation.name
         self.comment = ViewModelComment(from: operation.description)
 
         let params = operation.allParams

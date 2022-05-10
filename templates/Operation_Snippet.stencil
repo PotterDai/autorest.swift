@@ -35,7 +35,8 @@
 
     // Send request
     let context = PipelineContext.of(keyValues: [
-        ContextKey.allowedStatusCodes.rawValue: {{ op.pipelineContext.allowedStatusCodes}} as AnyObject
+        ContextKey.allowedStatusCodes.rawValue: {{ op.pipelineContext.allowedStatusCodes}} as AnyObject,
+        ContextKey.identifier.rawValue: Identifiers.{{ group.name }}.{{ op.rawName }}.rawValue as AnyObject,
     ])
     context.add(cancellationToken: options?.cancellationToken, applying: client.options)
     context.merge(with: options?.context)
