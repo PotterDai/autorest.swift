@@ -225,8 +225,8 @@ class SwiftGenerator: CodeGenerator {
         groups.sort(by: { $0.name.compare($1.name) == .orderedAscending })
         try render(
             template: "Identifiers_File",
-            toSubfolder: .util,
-            withFilename: "Identifiers",
+            toSubfolder: .models,
+            withFilename: "\(model.name)Identifiers",
             andParams: [
                 "packageName": model.name,
                 "groups": groups

@@ -2,9 +2,9 @@
 
 {% include "Import_Snippet.stencil" %}
 
-enum {{ packageName }}Identifiers {
+public enum {{ packageName }}Identifiers {
 {% for group in groups %}
-    enum {{ group.name }} : String {
+    public enum {{ group.name }} : String {
         {% for op in group.operations %}
             case {{ op.rawName }} = "{{ group.name }}_{{ op.rawName }}"
         {% endfor %}
