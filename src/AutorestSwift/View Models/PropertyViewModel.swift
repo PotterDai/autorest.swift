@@ -76,7 +76,7 @@ struct PropertyViewModel {
     /// Initialize from Value type (such as Property or Parameter)
     init(from schema: Value, parentName: String? = nil) {
         // The `name` field is preferred.
-        let name = schema.name
+        let name = schema.variableName
         assert(!name.isEmpty)
         self.name = name
         self.serializedName = schema.serializedName ?? name
