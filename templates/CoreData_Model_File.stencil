@@ -21,23 +21,23 @@ extension Managed{{ model.name }} : Identifiable {
         {% for property in model.properties %}
         {% if property.isEnumType %}
             {% if property.isGroupType %}
-            self.{{ property.name }} = plainModel.{{ property.name }}{{ property.optional|optionalMark }}.compactMap({ $0.rawValue })
+            {{ property.name }} = plainModel.{{ property.name }}{{ property.optional|optionalMark }}.compactMap({ $0.rawValue })
             {% else %}
-            self.{{ property.name }} = plainModel.{{ property.name }}{{ property.optional|optionalMark }}.rawValue
+            {{ property.name }} = plainModel.{{ property.name }}{{ property.optional|optionalMark }}.rawValue
             {% endif %}
         {% elif property.isDateType %}
             {% if property.isGroupType %}
-            self.{{ property.name }} = plainModel.{{ property.name }}{{ property.optional|optionalMark }}.compactMap({ $0.value })
+            {{ property.name }} = plainModel.{{ property.name }}{{ property.optional|optionalMark }}.compactMap({ $0.value })
             {% else %}
-            self.{{ property.name }} = plainModel.{{ property.name }}{{ property.optional|optionalMark }}.value
+            {{ property.name }} = plainModel.{{ property.name }}{{ property.optional|optionalMark }}.value
             {% endif %}
         {% elif property.isBasicType %}
-            self.{{ property.name }} = plainModel.{{ property.name }}
+            {{ property.name }} = plainModel.{{ property.name }}
         {% else %}
             {% if property.isGroupType %}
-            self.{{ property.name }} = NSOrderedSet(array: plainModel.{{ property.name }}{{ property.optional|optionalMark }}.compactMap({ Managed{{ property.elementClassName }}(plainModel: $0, context: context) }) ?? [])
+            {{ property.name }} = NSOrderedSet(array: plainModel.{{ property.name }}{{ property.optional|optionalMark }}.compactMap({ Managed{{ property.elementClassName }}(plainModel: $0, context: context) }) ?? [])
             {% else %}
-            self.{{ property.name }} = Managed{{ property.className }}(plainModel: plainModel.{{ property.name }}, context: context)
+            {{ property.name }} = Managed{{ property.className }}(plainModel: plainModel.{{ property.name }}, context: context)
             {% endif %}
         {% endif %}
         {% endfor %}
@@ -50,7 +50,7 @@ extension Managed{{ model.name }} : Identifiable {
                 {% if property.isGroupType %}
                 {{ property.name }}: self.{{ property.name }}{{ property.optional|optionalMark }}.compactMap({ {{ property.className }}(rawValue: $0)}){% if not forloop.last %},{% endif %}
                 {% else %}
-                {{ property.name }}: {{ property.className }}(rawValue: self.{{ property.name }})!{% if not forloop.last %},{% endif %}
+                {{ property.name }}: {{ property.className }}(rawValue: self.{{ property.name }}){{ property.optional|deoptionalMark }}{% if not forloop.last %},{% endif %}
                 {% endif %}
             {% elif property.isDateType %}
                 {% if property.isGroupType %}

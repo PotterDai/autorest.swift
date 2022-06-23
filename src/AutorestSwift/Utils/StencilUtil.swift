@@ -38,6 +38,12 @@ public func renderTemplate(filename: String, dictionary: [String: Any]) throws -
         }
         return ""
     }
+    ext.registerFilter("deoptionalMark") { (value: Any?) in
+        if let value = value as? Bool, value {
+            return ""
+        }
+        return "!"
+    }
     ext.registerFilter("decapitalize") { (value: Any?) in
         if let value = value as? String {
             return String(value.prefix(1).lowercased() + value.dropFirst())
