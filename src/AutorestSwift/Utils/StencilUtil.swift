@@ -64,6 +64,6 @@ public func renderTemplate(filename: String, dictionary: [String: Any]) throws -
         }
         return value
     }
-    let environment = Environment(loader: fsLoader, extensions: [ext], trimBehavior: TrimBehavior.smart)
+    let environment = Environment(loader: fsLoader, extensions: [ext], trimBehaviour: TrimBehaviour.smart)
     return try environment.renderTemplate(name: filename, context: dictionary)
 }
