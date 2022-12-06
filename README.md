@@ -41,6 +41,9 @@ modelerfour:
   # this will flatten parameters when payload-flattening-threshold is specified (or marked in the input spec)
   flatten-payloads: true
 
+  # this will disable duplicate operationID checks
+  additional-checks: false
+
   # this will make the content-type parameter always specified
   always-create-content-type-parameter: true
 

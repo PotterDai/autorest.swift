@@ -90,6 +90,12 @@ class Operation: Codable, LanguageShortcut {
         }
         return params
     }
+    
+    var name: String {
+        let shortcutName = (self as LanguageShortcut).name
+        let version = Int(Float(self.apiVersions?.first?.version ?? "") ?? 1)
+        return version == 1 ? shortcutName : "\(shortcutName)V\(version)"
+    }
 
     var returnsList: Bool {
         for _ in responses ?? [] {}
